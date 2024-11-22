@@ -3,7 +3,7 @@
 # Variables
 LOG_FILE="/var/log/ubuntu_igniter.log"
 HISTORY_FILE="/var/log/package_history.log"
-PACKAGE_LIST=("apt-transport-https" "ca-certificates" "software-properties-common" "curl" "unzip" "micro" "git" "ufw" "figlet" "bpytop" "mc" "fail2ban" "nvm" "net-tools" "exa" "bat")
+PACKAGE_LIST=("apt-transport-https" "ca-certificates" "software-properties-common" "curl" "unzip" "micro" "git" "ufw" "figlet" "bpytop" "mc" "fail2ban" "nvm" "net-tools" "exa" "batcat")
 INSTALLED_PACKAGES=()
 FAILED_PACKAGES=()
 
@@ -61,7 +61,7 @@ modify_user_config() {
 
     # Add welcome message to bashrc
     if ! grep -q "Ubuntu Igniter" "$bashrc_file"; then
-        echo -e "\n# Ubuntu Igniter Welcome Message\n$(figlet -f slant 'Welcome to $HOSTNAME!')" >> "$bashrc_file"
+        echo -e "\n# Ubuntu Igniter Welcome Message\nfiglet -f slant 'Welcome to $HOSTNAME!'" >> "$bashrc_file"
         echo "echo -e '\033[1;32mDefault packages installed: micro, git, curl, ufw, figlet, bpytop, mc, fail2ban, nvm, net-tools.\033[0m'" >> "$bashrc_file"
         echo "echo -e '\033[1;34mFirewall rules:\033[0m'" >> "$bashrc_file"
         echo "echo -e '\033[1;33m- Allow SSH (OpenSSH)\n- Deny all incoming connections\n- Allow all outgoing connections\033[0m'" >> "$bashrc_file"
@@ -99,6 +99,7 @@ sudo systemctl start fail2ban || log_message "⚠️ Failed to start Fail2Ban."
 log_message "📄 Saving installed package list... 📄"
 dpkg --get-selections | grep -v deinstall > $HISTORY_FILE
 
+log_message "🔁 Reloading Bashrc... ♻️"
 source ~/.bashrc
 
 # Installation summary
