@@ -99,6 +99,8 @@ sudo systemctl start fail2ban || log_message "⚠️ Failed to start Fail2Ban."
 log_message "📄 Saving installed package list... 📄"
 dpkg --get-selections | grep -v deinstall > $HISTORY_FILE
 
+source ~/.bashrc
+
 # Installation summary
 log_message "📊 Installation summary:"
 log_message "✅ Successfully installed packages: ${INSTALLED_PACKAGES[*]}"
