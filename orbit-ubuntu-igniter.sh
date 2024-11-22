@@ -3,7 +3,7 @@
 # Variables
 LOG_FILE="/var/log/ubuntu_igniter.log"
 HISTORY_FILE="/var/log/package_history.log"
-PACKAGE_LIST=("apt-transport-https" "ca-certificates" "software-properties-common" "curl" "unzip" "micro" "git" "ufw" "figlet" "bpytop" "mc" "fail2ban" "nvm" "net-tools" "exa" "bat")
+PACKAGE_LIST=("apt-transport-https" "ca-certificates" "software-properties-common" "curl" "unzip" "micro" "git" "ufw" "figlet" "bpytop" "mc" "fail2ban" "nvm" "net-tools" "bat")
 INSTALLED_PACKAGES=()
 FAILED_PACKAGES=()
 
@@ -43,6 +43,21 @@ for package in "${PACKAGE_LIST[@]}"; do
     fi
 done
 
+# Install and configure eza (modern ls)
+log_message "📦 Installing eza (modern ls)... 📦"
+if ! command -v eza &> /dev/null; then
+    sudo apt install -y gpg || log_message "⚠️ Failed to install gpg for eza setup."
+    sudo mkdir -p /etc/apt/keyrings
+    wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
+    echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
+    sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
+    sudo apt update
+    sudo apt install -y eza || log_message "⚠️ Failed to install eza."
+    log_message "✅ eza successfully installed!"
+else
+    log_message "✅ eza is already installed."
+fi
+
 # Function to add aliases and configuration to bashrc
 modify_user_config() {
     local bashrc_file=$1
@@ -50,7 +65,7 @@ modify_user_config() {
 
     # Add aliases if not already present
     if ! grep -q "alias ls=" "$bash_aliases_file"; then
-        echo "alias ls='exa -lah -T --git --hyperlink --header'" >> "$bash_aliases_file"
+        echo "alias ls='eza -lah -T --git --hyperlink --header'" >> "$bash_aliases_file"
         log_message "✅ Alias 'ls' added to $bash_aliases_file."
     fi
 
