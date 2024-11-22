@@ -7,7 +7,7 @@
 ## 🌟 Features
 
 - 🚀 **Automated Updates**: Runs `sudo apt update && sudo apt upgrade -y` to keep your system up to date.
-- 📦 **Essential Package Installation**: Installs tools like `curl`, `git`, `unzip`, `ufw`, `micro`, `figlet`, `bpytop`, `mc`, `fail2ban`, `nvm`, `exa`, `bat`, and more.
+- 📦 **Essential Package Installation**: Installs tools like `curl`, `git`, `unzip`, `ufw`, `micro`, `figlet`, `bpytop`, `mc`, `fail2ban`, `eza`, `bat`, and more.
 - 🔐 **Enhanced Security**: Configures the Uncomplicated Firewall (UFW) with secure rules:
   - Allows SSH (OpenSSH) connections.
   - Denies all incoming connections by default.
