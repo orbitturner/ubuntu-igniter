@@ -3,7 +3,7 @@
 # Variables
 LOG_FILE="/var/log/ubuntu_igniter.log"
 HISTORY_FILE="/var/log/package_history.log"
-PACKAGE_LIST=("ufw" "fail2ban" "mc" "tufw" "python3" "nvm" "curl" "git" "net-tools")
+PACKAGE_LIST=("apt-transport-https" "ca-certificates" "software-properties-common" "curl" "unzip" "micro" "git" "ufw" "figlet" "bpytop" "mc" "fail2ban" "nvm" "net-tools" "exa" "bat")
 INSTALLED_PACKAGES=()
 FAILED_PACKAGES=()
 
@@ -22,7 +22,7 @@ cleanup() {
 trap cleanup SIGINT
 
 # Update et upgrade du système
-log_message "🔄 Mise à jour du système... 🔄"
+log_message "🔄 Mise à jour et mise à niveau du système... 🔄"
 sudo apt update -y && sudo apt upgrade -y || log_message "⚠️ Mise à jour échouée. ⚠️"
 
 # Installation des packages sans bloquer le script en cas d'erreur
@@ -43,11 +43,24 @@ for package in "${PACKAGE_LIST[@]}"; do
     fi
 done
 
+# Configuration des aliases et outils de commande
+log_message "⚙️ Configuration des aliases et outils... ⚙️"
+if command -v exa &> /dev/null; then
+    echo "alias ls='exa -lah -T --git --hyperlink --header'" >> ~/.bash_aliases
+    log_message "✅ Alias 'ls' configuré avec exa."
+fi
+
+if command -v batcat &> /dev/null; then
+    echo "alias cat='batcat'" >> ~/.bash_aliases
+    log_message "✅ Alias 'cat' configuré avec bat."
+fi
+
+source ~/.bashrc
+
 # Configuration d'UFW (Firewall)
 log_message "🛡️ Configuration du firewall avec UFW... 🛡️"
 sudo ufw allow ssh || log_message "⚠️ Échec lors de la configuration d'OpenSSH."
 sudo ufw allow OpenSSH || log_message "⚠️ Échec lors de l'autorisation OpenSSH."
-sudo ufw allow 443 || log_message "⚠️ Échec lors de l'autorisation du port 443."
 sudo ufw default deny incoming || log_message "⚠️ Échec lors de la configuration par défaut d'UFW."
 sudo ufw default allow outgoing || log_message "⚠️ Échec lors de l'autorisation des connexions sortantes."
 sudo ufw --force enable || log_message "⚠️ Échec lors de l'activation d'UFW."
@@ -60,6 +73,18 @@ sudo systemctl start fail2ban || log_message "⚠️ Échec lors du démarrage d
 # Historiser la configuration dans un fichier
 log_message "📄 Génération du fichier de configuration des packages installés... 📄"
 dpkg --get-selections | grep -v deinstall > $HISTORY_FILE
+
+# Ajouter une notification dans le bashrc
+log_message "🔔 Ajout d'une notification dans le bashrc... 🔔"
+if ! grep -q "Ubuntu Igniter" ~/.bashrc; then
+    echo -e "\n# Message Ubuntu Igniter\n$(figlet -f slant 'Welcome to $HOSTNAME!')" >> ~/.bashrc
+    echo "echo -e '\033[1;32mDefault packages installed: micro, git, curl, ufw, figlet, bpytop, mc, fail2ban, nvm, net-tools.\033[0m'" >> ~/.bashrc
+    echo "echo -e '\033[1;34mFirewall rules:\033[0m'" >> ~/.bashrc
+    echo "echo -e '\033[1;33m- Allow SSH (OpenSSH)\n- Deny all incoming connections\n- Allow all outgoing connections\033[0m'" >> ~/.bashrc
+    echo "echo -e '\033[1;34mUFW Current Status:\033[0m'" >> ~/.bashrc
+    echo "ufw status" >> ~/.bashrc
+fi
+
 
 # Récapitulatif de l'installation
 log_message "📊 Récapitulatif de l'installation :"

@@ -1,89 +1,140 @@
-# 🔥 Ubuntu-Igniter 🔥
+# 🔥 Ubuntu Igniter 🔥
 
-**Ubuntu-Igniter** is your ultimate bash script for lighting up new Ubuntu installations with enhanced security, seamless automation, and a touch of flair. Designed to be robust, scalable, and idempotent, it simplifies your system's setup process while ensuring that everything is locked down tight. Let Ubuntu-Igniter do the heavy lifting for you—just hit play and ignite your Ubuntu experience.
+**Ubuntu Igniter** is a robust and customizable script designed to bootstrap and configure your Ubuntu environment with ease. From installing essential packages to securing your system with firewall rules, this script simplifies your initial setup while adding modern tools and aliases to supercharge your workflow.
+
+---
 
 ## 🌟 Features
 
-- 🚀 **Automated Package Installation**: Speed up your setup with automatic installation of essential tools like `ufw`, `fail2ban`, `mc`, `python3`, `nvm`, and more.
-- 🔐 **Enhanced Security**: Fortify your system with UFW firewall and Fail2Ban to block brute-force attacks, with all security settings configured for you.
-- 🛠️ **Error-Resilient**: Keeps going, even if some packages fail. Logs all errors and continues the process without missing a beat.
-- 📊 **Logging with Style**: Every action is logged with a sprinkle of emojis to keep things fun, and stored in `/var/log/ubuntu_igniter.log` for review.
-- 📜 **Package History Tracking**: Generates a complete list of installed packages, stored in `/var/log/package_history.log`, so you can easily replicate the setup later.
-- 🏁 **Installation Summary**: At the end, you’ll get a neat summary of what was installed and any hiccups along the way.
+- 🚀 **Automated Updates**: Runs `sudo apt update && sudo apt upgrade -y` to keep your system up to date.
+- 📦 **Essential Package Installation**: Installs tools like `curl`, `git`, `unzip`, `ufw`, `micro`, `figlet`, `bpytop`, `mc`, `fail2ban`, `nvm`, `exa`, `bat`, and more.
+- 🔐 **Enhanced Security**: Configures the Uncomplicated Firewall (UFW) with secure rules:
+  - Allows SSH (OpenSSH) connections.
+  - Denies all incoming connections by default.
+  - Allows all outgoing connections.
+- ⚙️ **Modern Aliases**:
+  - Replaces `ls` with `exa` for a richer file listing experience.
+  - Replaces `cat` with `bat` for syntax-highlighted file previews.
+- ✨ **Custom Welcome Message**:
+  - Displays a stylized message using `figlet` upon opening a terminal.
+  - Includes installed package details, firewall rules, and the current UFW status.
 
 ---
 
-## ⚙️ System Requirements
+## 🚀 How to Use
 
-- **Ubuntu OS**
-- **Root or sudo privileges** to execute the script.
+You can run the **Ubuntu Igniter** script in two ways:
 
----
+### 1. Direct Execution Without Cloning
+Run the script directly using `curl` or `wget`:
 
-## 🚀 Quick Start
+```bash
+bash <(curl -s https://raw.githubusercontent.com/orbitturner/ubuntu-igniter/main/orbit-ubuntu-igniter.sh)
+```
 
-1. **Download the Script**:
-   Clone the repo or download the script directly:
-   ```bash
-   git clone https://github.com/your-repo/ubuntu-igniter.git
-   ```
+or
 
-2. **Make It Executable**:
-   Give the script permission to run:
-   ```bash
-   chmod +x ubuntu-igniter.sh
-   ```
+```bash
+wget -qO- https://raw.githubusercontent.com/orbitturner/ubuntu-igniter/main/orbit-ubuntu-igniter.sh | bash
+```
 
-3. **Ignite Your Ubuntu**:
-   Launch the script with superuser privileges:
-   ```bash
-   sudo ./ubuntu-igniter.sh
-   ```
+### 2. Clone and Execute
+If you prefer to clone the repository:
 
-   🔥 The script will:
-   - Update & upgrade your system.
-   - Install essential packages.
-   - Configure firewall and Fail2Ban security.
-   - Log everything and generate a summary at the end.
+```bash
+git clone https://github.com/orbitturner/ubuntu-igniter.git
+cd ubuntu-igniter
+sudo bash orbit-ubuntu-igniter.sh
+```
 
 ---
 
 ## 🔧 Customization
 
-Want to tweak the packages? No problem! Simply modify the `PACKAGE_LIST` in the script to fit your needs:
+You can customize the script to fit your needs:
 
-```bash
-PACKAGE_LIST=("ufw" "fail2ban" "mc" "tufw" "python3" "nvm" "curl" "git" "net-tools")
+1. **Add or Remove Packages**:
+   Modify the `PACKAGE_LIST` variable in the script to include or exclude any packages you prefer:
+   ```bash
+   PACKAGE_LIST=("curl" "git" "unzip" "ufw" "micro" "figlet" "bpytop" "mc" "fail2ban" "nvm" "exa" "bat")
+   ```
+
+2. **Firewall Rules**:
+   Adjust the UFW rules directly in the script under the "Firewall Configuration" section.
+
+3. **Welcome Message**:
+   Update the custom message displayed upon opening a terminal by modifying the `~/.bashrc` configuration section.
+
+---
+
+## 📜 What Does the Script Do?
+
+### 1. **System Updates**
+The script updates and upgrades your Ubuntu system to ensure it’s running the latest packages and security patches.
+
+### 2. **Package Installation**
+Installs the following tools:
+- `curl`, `git`, `unzip`: Common utilities for downloads and version control.
+- `ufw`: Firewall management.
+- `micro`: A lightweight text editor.
+- `figlet`: For stylized terminal messages.
+- `bpytop`: A modern resource monitoring tool.
+- `mc`: Midnight Commander for file management.
+- `fail2ban`: Protects against brute-force attacks.
+- `nvm`: Node Version Manager for managing Node.js installations.
+- `exa`: An enhanced `ls` replacement.
+- `bat`: An enhanced `cat` replacement with syntax highlighting.
+
+### 3. **Firewall Rules**
+Configures UFW with the following rules:
+- **Allow OpenSSH** for SSH connections.
+- **Default deny all incoming traffic** for security.
+- **Default allow all outgoing traffic** for seamless connections.
+
+### 4. **Custom Aliases**
+Sets up the following aliases:
+- `ls` → `exa -lah -T --git --hyperlink --header`
+- `cat` → `bat`
+
+### 5. **Custom Welcome Message**
+Adds a terminal startup message using `figlet` with details about:
+- Installed default packages.
+- Configured firewall rules.
+- Current UFW status.
+
+---
+
+## 📋 Example Terminal Welcome Message
+
+After running the script, every new terminal session will display the following:
+
 ```
-
-Add any package you love, remove what you don't need, and Ubuntu-Igniter will take care of the rest!
-
----
-
-## 📋 Logging and Reports
-
-- **Detailed Logs**: Every action the script takes is logged and stored in `/var/log/ubuntu_igniter.log`.
-- **Package History**: A full list of installed packages is saved in `/var/log/package_history.log` for easy reference or to replicate on another machine.
-- **Installation Summary**: Get a recap of success and failure at the end of the process—no need to scroll through long logs to find out what worked and what didn’t.
-
----
-
-## 🛡️ Resilience
-
-Even if an installation fails, Ubuntu-Igniter keeps going. Errors are logged without stopping the script, ensuring your system setup completes as smoothly as possible. And if you hit `CTRL+C` during the install, Ubuntu-Igniter will gracefully exit, making sure nothing breaks mid-installation.
+  Welcome to MY-HOSTNAME!
+Default packages installed: micro, git, curl, ufw, figlet, bpytop, mc, fail2ban, nvm, net-tools.
+Firewall rules:
+- Allow SSH (OpenSSH)
+- Deny all incoming connections
+- Allow all outgoing connections
+UFW Current Status:
+Status: active
+To                         Action      From
+--                         ------      ----
+OpenSSH                    ALLOW       Anywhere
+...
+```
 
 ---
 
 ## 🤝 Contributions
 
-Feel like adding your own magic to **Ubuntu-Igniter**? Fork the repository, make your changes, and submit a pull request. Contributions are always welcome to make this script even more awesome!
+Feel free to contribute to **Ubuntu Igniter** by forking the repository and submitting a pull request. Ideas, fixes, and improvements are always welcome!
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License. Check out the `LICENSE` file for more details.
+This project is licensed under the MIT License. See the `LICENSE` file for details.
 
 ---
 
-Ignite your Ubuntu installations with style and security. With **Ubuntu-Igniter**, it's more than just a setup—it's a launchpad for productivity. 🚀
+**Ubuntu Igniter** is your one-stop solution for configuring a new Ubuntu environment with security, tools, and modern enhancements—all in one script. 🚀
