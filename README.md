@@ -29,13 +29,13 @@ You can run the **Ubuntu Igniter** script in two ways:
 Run the script directly using `curl` or `wget`:
 
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/orbitturner/ubuntu-igniter/main/orbit-ubuntu-igniter.sh)
+sudo bash <(curl -s https://raw.githubusercontent.com/orbitturner/ubuntu-igniter/main/orbit-ubuntu-igniter.sh)
 ```
 
 or
 
 ```bash
-wget -qO- https://raw.githubusercontent.com/orbitturner/ubuntu-igniter/main/orbit-ubuntu-igniter.sh | bash
+wget -qO- https://raw.githubusercontent.com/orbitturner/ubuntu-igniter/main/orbit-ubuntu-igniter.sh | sudo bash
 ```
 
 ### 2. Clone and Execute

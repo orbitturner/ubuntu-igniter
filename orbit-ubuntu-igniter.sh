@@ -28,7 +28,7 @@ sudo apt update -y && sudo apt upgrade -y || log_message "⚠️ Update failed. 
 # Install packages without blocking the script on errors
 log_message "📦 Installing packages... 📦"
 for package in "${PACKAGE_LIST[@]}"; do
-    if dpkg -l | grep -q $package; then
+    if dpkg -l | grep -q $package && [ "$package" != "bat" ]; then
         log_message "✅ $package is already installed."
     else
         log_message "⏳ Installing $package... ⏳"
@@ -81,7 +81,7 @@ modify_user_config() {
         echo "echo -e '\033[1;34mFirewall rules:\033[0m'" >> "$bashrc_file"
         echo "echo -e '\033[1;33m- Allow SSH (OpenSSH)\n- Deny all incoming connections\n- Allow all outgoing connections\033[0m'" >> "$bashrc_file"
         echo "echo -e '\033[1;34mUFW Current Status:\033[0m'" >> "$bashrc_file"
-        echo "ufw status" >> "$bashrc_file"
+        echo "echo -e '> type: sudo ufw status'" >> "$bashrc_file"
         log_message "✅ Welcome message added to $bashrc_file."
     fi
 }
