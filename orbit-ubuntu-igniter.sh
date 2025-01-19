@@ -3,7 +3,7 @@
 # Variables
 LOG_FILE="/var/log/ubuntu_igniter.log"
 HISTORY_FILE="/var/log/package_history.log"
-PACKAGE_LIST=("apt-transport-https" "ca-certificates" "software-properties-common" "curl" "unzip" "micro" "git" "ufw" "figlet" "bpytop" "mc" "fail2ban" "net-tools" "bat")
+PACKAGE_LIST=("apt-transport-https" "ca-certificates" "software-properties-common" "curl" "unzip" "micro" "git" "ufw" "figlet" "bpytop" "mc" "fail2ban" "net-tools" "bat" "superfile")
 INSTALLED_PACKAGES=()
 FAILED_PACKAGES=()
 
